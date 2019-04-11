@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Simplifying GUI development with the JUCE framework</title>
+<meta name="author" content="Daníel Grétarsson and Ólafur Bogason"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./css/reveal.css"/>
+
+<link rel="stylesheet" href="./css/theme/black.css" id="theme"/>
+
+<link rel="stylesheet" href="./presentations.css"/>
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = './css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1 class="title">Simplifying GUI development with the JUCE framework</h1><h2 class="author">Daníel Grétarsson and Ólafur Bogason</h2>
+</section>
+
+<section>
+<section id="slide-org502c903" data-background="#393939">
+<h2 id="org502c903"></h2>
+
+<div class="figure">
+<p><img src="img/juce.jpeg" alt="juce.jpeg" />
+</p>
+</div>
+
+<p>
+JUCE is a partially open-source <b>cross-platform C++</b> application framework, used for the development of desktop and mobile applications.
+</p>
+
+<p>
+<a href="https://juce.com/learn/tutorials">Nice set of tutorials</a> and an <a href="https://forum.juce.com/">active developer community</a>.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org5a649ec">
+<h2 id="org5a649ec">Basics</h2>
+<div class="outline-text-2" id="text-org5a649ec">
+</div>
+</section>
+<section id="slide-org030141a">
+<h3 id="org030141a">Component hierarchy</h3>
+<p>
+Juce has an object oriented model of components. Each component knows how to paint and resize itself.
+</p>
+
+<p>
+In a classic OOP fashion some components (parents) can own other components (children), and are in charge of laying them out, resizing etc.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">class</span> <span style="color: #ce537a; font-weight: bold;">Foo</span> : <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">Component</span> <span style="color: #4f97d7;">{</span>
+<span style="color: #bc6ec5; font-weight: bold;">Foo</span><span style="color: #bc6ec5;">()</span>
+<span style="color: #bc6ec5;">{</span>
+    addAndMakeVisible<span style="color: #2d9574;">(</span>tilt<span style="color: #2d9574;">)</span>;
+    addAndMakeVisible<span style="color: #2d9574;">(</span>pan<span style="color: #2d9574;">)</span>;
+    addAndMakeVisible<span style="color: #2d9574;">(</span>roll<span style="color: #2d9574;">)</span>;
+    addAndMakeVisible<span style="color: #2d9574;">(</span>vibrato<span style="color: #2d9574;">)</span>;
+    addAndMakeVisible<span style="color: #2d9574;">(</span>tap<span style="color: #2d9574;">)</span>;
+<span style="color: #bc6ec5;">}</span>
+</pre>
+</div>
+</section>
+<section id="slide-org6bdf7e9">
+<h3 id="org6bdf7e9">Laying out components</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">resized</span><span style="color: #4f97d7;">()</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">override</span>
+<span style="color: #4f97d7;">{</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span>       <span style="color: #7590db;">r</span> = getLocalBounds<span style="color: #bc6ec5;">()</span>;
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> h = r.proportionOfHeight<span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">1</span> / <span style="color: #4f97d7; font-weight: bold; font-style: italic;">static_cast</span><span style="color: #2d9574;">&lt;</span><span style="color: #ce537a; font-weight: bold;">float</span><span style="color: #2d9574;">&gt;(</span>NumTypeButtons<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> reduce = <span style="color: #a45bad;">5</span>;
+
+    tilt.setBounds<span style="color: #bc6ec5;">(</span>r.removeFromTop<span style="color: #2d9574;">(</span>h<span style="color: #2d9574;">)</span>.reduced<span style="color: #2d9574;">(</span>reduce<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+    pan.setBounds<span style="color: #bc6ec5;">(</span>r.removeFromTop<span style="color: #2d9574;">(</span>h<span style="color: #2d9574;">)</span>.reduced<span style="color: #2d9574;">(</span>reduce<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+    roll.setBounds<span style="color: #bc6ec5;">(</span>r.removeFromTop<span style="color: #2d9574;">(</span>h<span style="color: #2d9574;">)</span>.reduced<span style="color: #2d9574;">(</span>reduce<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+    vibrato.setBounds<span style="color: #bc6ec5;">(</span>r.removeFromTop<span style="color: #2d9574;">(</span>h<span style="color: #2d9574;">)</span>.reduced<span style="color: #2d9574;">(</span>reduce<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+    tap.setBounds<span style="color: #bc6ec5;">(</span>r.removeFromTop<span style="color: #2d9574;">(</span>h<span style="color: #2d9574;">)</span>.reduced<span style="color: #2d9574;">(</span>reduce<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>;
+<span style="color: #4f97d7;">}</span>
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf1ff12b">
+<h2 id="orgf1ff12b">Keeping components in sync - Naive way</h2>
+<div class="outline-text-2" id="text-orgf1ff12b">
+</div>
+</section>
+<section id="slide-org93b47c3">
+<h3 id="org93b47c3">Propagating changes in component hierarchy</h3>
+
+<div class="figure">
+<p><img src="img/dashboard.png" alt="dashboard.png" />
+</p>
+</div>
+
+</section>
+<section id="slide-org6ef2255">
+<h3 id="org6ef2255">From parent to child</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">class</span> <span style="color: #ce537a; font-weight: bold;">MovementRowView</span> : <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #ce537a; font-weight: bold;">RowView</span>, <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">ComboBox</span>::<span style="color: #ce537a; font-weight: bold;">Listener</span>, <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">Slider</span>::<span style="color: #ce537a; font-weight: bold;">Listener</span> <span style="color: #4f97d7;">{</span>
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span>:
+    <span style="color: #bc6ec5; font-weight: bold;">MovementRowView</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">PresetBankMessageListener</span>&amp; <span style="color: #7590db;">l</span>, <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Preset</span>&amp; <span style="color: #7590db;">p</span>, <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Movement</span>&amp; <span style="color: #7590db;">m</span>, <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Axis</span>&amp; <span style="color: #7590db;">a</span><span style="color: #bc6ec5;">)</span>;
+  
+    <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">For parent -&gt; child communication</span>
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">unselectPitchbend</span><span style="color: #bc6ec5;">()</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">updateMidiBitWidth</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #7590db;">is14bit</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">relativeMovements</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #7590db;">absolute</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">handleMidi</span><span style="color: #bc6ec5;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">MidiMessage</span>&amp; <span style="color: #7590db;">msg</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">inputRangeUpdated</span><span style="color: #bc6ec5;">()</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">enableMapping</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #7590db;">enable</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">actionUpdated</span><span style="color: #bc6ec5;">()</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">override</span>; 
+
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">private</span>:
+    <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">GUI state (model)</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Preset</span>&amp; <span style="color: #7590db;">preset</span>;
+
+    <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Movement</span>&amp; <span style="color: #7590db;">movement</span>;
+    <span style="color: #a45bad;">Wave</span>::<span style="color: #ce537a; font-weight: bold;">Axis</span>&amp; <span style="color: #7590db;">axis</span>;
+  
+    <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">For child -&gt; parent communication</span>
+    <span style="color: #ce537a; font-weight: bold;">PresetBankMessageListener</span>&amp; <span style="color: #7590db;">listener</span>;
+<span style="color: #4f97d7;">}</span>;
+</pre>
+</div>
+</section>
+<section id="slide-orgcb63939">
+<h3 id="orgcb63939">From child to parent</h3>
+<p>
+Take in reference to a listener. Have to remember to call correct function in the right context etc.
+</p>
+
+<p>
+Callback for each state-change.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #a45bad;">MovementRowView</span>::<span style="color: #bc6ec5; font-weight: bold;">buttonClicked</span><span style="color: #4f97d7;">(</span><span style="color: #ce537a; font-weight: bold;">Button</span>* <span style="color: #7590db;">button</span><span style="color: #4f97d7;">)</span>
+<span style="color: #4f97d7;">{</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>button == &amp;activeToggle<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> enabled = button-&gt;getToggleState<span style="color: #2d9574;">()</span>;
+
+        enable<span style="color: #2d9574;">(</span>enabled<span style="color: #2d9574;">)</span>;
+        enableComponent<span style="color: #2d9574;">(</span>&amp;relativeCenterPointSlider, <span style="color: #a45bad;">!</span>movement.absolute &amp;&amp; enabled<span style="color: #2d9574;">)</span>;
+
+        axis.enabled = enabled;
+
+        listener.pushChange<span style="color: #2d9574;">(</span>axis<span style="color: #2d9574;">)</span>;
+
+    <span style="color: #bc6ec5;">}</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">else</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>button == &amp;invertToggle<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        axis.invert = button-&gt;getToggleState<span style="color: #2d9574;">()</span>;
+
+        listener.pushChange<span style="color: #2d9574;">(</span>axis<span style="color: #2d9574;">)</span>;
+
+    <span style="color: #bc6ec5;">}</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">else</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>button == &amp;mapButton<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span>* <span style="color: #7590db;">parent</span> = <span style="color: #4f97d7; font-weight: bold; font-style: italic;">dynamic_cast</span><span style="color: #67b11d;">&lt;</span><span style="color: #ce537a; font-weight: bold;">MovementView</span>*<span style="color: #67b11d;">&gt;(</span>getParentComponent<span style="color: #b1951d;">()</span><span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span> <span style="color: #2d9574;">{</span>
+            <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> enable = <span style="color: #a45bad;">!</span>axis.mapping;
+
+            parent-&gt;disableAllMapping<span style="color: #67b11d;">()</span>;
+
+            enableMapping<span style="color: #67b11d;">(</span>enable<span style="color: #67b11d;">)</span>;
+        <span style="color: #2d9574;">}</span>
+    <span style="color: #bc6ec5;">}</span>
+<span style="color: #4f97d7;">}</span>
+
+</pre>
+</div>
+</section>
+<section id="slide-org11571e6">
+<h3 id="org11571e6">MVC</h3>
+<ul>
+<li>Model &#x2013; GUI state sprinkled all over.</li>
+<li>View &#x2013; <code>juce::Component</code></li>
+<li>Controller &#x2013; Functions in children called by parents. Messages from children to parents or forward declaration of parent components.</li>
+
+</ul>
+
+<p>
+Highly coupled, hard to maintain, doesn't scale.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd24b987">
+<h2 id="orgd24b987">Keeping components in sync - State as a tree</h2>
+<div class="outline-text-2" id="text-orgd24b987">
+</div>
+</section>
+<section id="slide-org0111ae3">
+<h3 id="org0111ae3">Multiple views in sync</h3>
+
+<div class="figure">
+<p><img src="img/softwave.png" alt="softwave.png" width="60%" height="60%" />
+</p>
+</div>
+
+</section>
+<section id="slide-org9a2d648">
+<h3 id="org9a2d648">Enter ValueTrees</h3>
+<p>
+Intuition: Thinking about state in a GUI as a tree-like data structure (think <b>type-safe</b> XML).
+</p>
+
+<p>
+<code>juce::ValueTrees</code> are a lightweight wrapper around reference-counted <code>juce::Value</code>. Their recursive nature allows for passing the whole tree or subtrees between components. Components subscribe as listeners to changes in trees or subtrees. Single point of mutating state that is then reflected in the GUI.
+</p>
+
+<p>
+This may not sound all that interesting but the effect <a href="https://www.youtube.com/watch?v=3IaMjH5lBEY">can be quite dramatic</a>!
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7;">&lt;</span>?xml version=<span style="color: #2d9574;">"1.0"</span> encoding=<span style="color: #2d9574;">"UTF-8"</span>?<span style="color: #4f97d7;">&gt;</span>
+
+<span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">PRESET_BANK</span> <span style="color: #7590db;">name</span>=<span style="color: #2d9574;">"My Preset Bank"</span> id=<span style="color: #2d9574;">"0"</span> uuid=<span style="color: #2d9574;">"e7ad1981153240728a5b324e89b8f4f4"</span>
+             focused=<span style="color: #2d9574;">"0"</span> position=<span style="color: #2d9574;">"0"</span><span style="color: #4f97d7;">&gt;</span>
+  <span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">PRESET</span> <span style="color: #7590db;">name</span>=<span style="color: #2d9574;">"Preset 0"</span> open_by_default=<span style="color: #2d9574;">"1"</span> id=<span style="color: #2d9574;">"648c565fb3cd4ce6855e657a7b3b5130"</span>
+          focused=<span style="color: #2d9574;">"0"</span><span style="color: #4f97d7;">&gt;</span>
+    <span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">MAPPING</span> <span style="color: #7590db;">id</span>=<span style="color: #2d9574;">"55d08a53fc7f44c494982b1a802f8476"</span> position=<span style="color: #2d9574;">"0"</span> type=<span style="color: #2d9574;">"16"</span>
+             name=<span style="color: #2d9574;">"Tilt"</span> points=<span style="color: #2d9574;">"0|0|1|1|0.5|0.5"</span> focused=<span style="color: #2d9574;">"1"</span> display_norm_t=<span style="color: #2d9574;">"0.5"</span>
+             parameter_id=<span style="color: #2d9574;">"0"</span> parameter_name=<span style="color: #2d9574;">"Delay (Seconds)"</span>/<span style="color: #4f97d7;">&gt;</span>
+    <span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">MAPPING</span> <span style="color: #7590db;">id</span>=<span style="color: #2d9574;">"68a4790a722a44da8fc721f38683f470"</span> position=<span style="color: #2d9574;">"0"</span> type=<span style="color: #2d9574;">"17"</span>
+             name=<span style="color: #2d9574;">"Pan"</span> points=<span style="color: #2d9574;">"0|0|1|1|0.5|0.5"</span> focused=<span style="color: #2d9574;">"0"</span> display_norm_t=<span style="color: #2d9574;">"0.5"</span>/<span style="color: #4f97d7;">&gt;</span>
+    <span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">MAPPING</span> <span style="color: #7590db;">id</span>=<span style="color: #2d9574;">"a7a7afa9ce07465a8dbfaf3bd8d745e9"</span> position=<span style="color: #2d9574;">"0"</span> type=<span style="color: #2d9574;">"18"</span>
+             name=<span style="color: #2d9574;">"Roll"</span> points=<span style="color: #2d9574;">"0|0|1|1|0.5|0.5"</span> focused=<span style="color: #2d9574;">"0"</span> display_norm_t=<span style="color: #2d9574;">"0.5"</span>/<span style="color: #4f97d7;">&gt;</span>
+    <span style="color: #4f97d7;">&lt;</span><span style="color: #ce537a; font-weight: bold;">PLUGIN</span> <span style="color: #7590db;">id</span>=<span style="color: #2d9574;">"LADSPA-Simple Delay Line-a70dec2d-0"</span> name=<span style="color: #2d9574;">"Simple Delay Line"</span>
+            version=<span style="color: #2d9574;">"1.1"</span> node_id=<span style="color: #2d9574;">"5"</span>/<span style="color: #4f97d7;">&gt;</span>
+  <span style="color: #4f97d7;">&lt;</span>/PRESET<span style="color: #4f97d7;">&gt;</span>
+<span style="color: #4f97d7;">&lt;</span>/PRESET_BANK<span style="color: #4f97d7;">&gt;</span>
+</pre>
+</div>
+
+</section>
+<section id="slide-orgce4b49d">
+<h3 id="orgce4b49d">Communicate by changing tree</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">class</span> <span style="color: #ce537a; font-weight: bold;">MappingViewEmpty</span> : <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">Component</span>
+<span style="color: #4f97d7;">{</span>
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span>:
+    <span style="color: #bc6ec5; font-weight: bold;">MappingViewEmpty</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #7590db;">vt</span>, <span style="color: #ce537a; font-weight: bold;">UndoManager</span>&amp; <span style="color: #7590db;">u</span><span style="color: #bc6ec5;">)</span> : state<span style="color: #bc6ec5;">(</span>vt<span style="color: #bc6ec5;">)</span>, undoManager<span style="color: #bc6ec5;">(</span>u<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{}</span>
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">private</span>:
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">addMapping</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">int</span> <span style="color: #7590db;">type</span><span style="color: #bc6ec5;">)</span>
+    <span style="color: #bc6ec5;">{</span>
+        <span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #7590db;">new_mapping</span><span style="color: #2d9574;">(</span><span style="color: #a45bad;">IDs</span>::MAPPING<span style="color: #2d9574;">)</span>;
+        <span style="color: #a45bad;">Helpers</span>::createUuidProperty<span style="color: #2d9574;">(</span>new_mapping<span style="color: #2d9574;">)</span>;
+        new_mapping.setProperty<span style="color: #2d9574;">(</span><span style="color: #a45bad;">IDs</span>::position, idx, <span style="color: #a45bad;">nullptr</span><span style="color: #2d9574;">)</span>;
+        new_mapping.setProperty<span style="color: #2d9574;">(</span><span style="color: #a45bad;">IDs</span>::type, type, <span style="color: #a45bad;">nullptr</span><span style="color: #2d9574;">)</span>;
+
+        new_mapping.setProperty<span style="color: #2d9574;">(</span><span style="color: #a45bad;">IDs</span>::name, DefaultViewTypes.at<span style="color: #67b11d;">(</span>type<span style="color: #67b11d;">)</span>, <span style="color: #a45bad;">nullptr</span><span style="color: #2d9574;">)</span>;
+
+        state.appendChild<span style="color: #2d9574;">(</span>new_mapping, &amp;undoManager<span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span>;
+
+    <span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #7590db;">state</span>;
+    <span style="color: #ce537a; font-weight: bold;">UndoManager</span>&amp; <span style="color: #7590db;">undoManager</span>;
+<span style="color: #4f97d7;">}</span>;
+</pre>
+</div>
+</section>
+<section id="slide-org24d55c5">
+<h3 id="org24d55c5">React to changes in tree</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">class</span> <span style="color: #ce537a; font-weight: bold;">MappingList</span> : <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">Component</span>, <span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span> <span style="color: #a45bad;">juce</span>::<span style="color: #a45bad;">ValueTree</span>::<span style="color: #ce537a; font-weight: bold;">Listener</span> <span style="color: #4f97d7;">{</span>
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">public</span>:
+    <span style="color: #bc6ec5; font-weight: bold;">MappingList</span><span style="color: #bc6ec5;">(</span><span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #7590db;">v</span>, <span style="color: #ce537a; font-weight: bold;">UndoManager</span>&amp; <span style="color: #7590db;">u</span><span style="color: #bc6ec5;">)</span> : state<span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">std</span>::move<span style="color: #2d9574;">(</span>v<span style="color: #2d9574;">)</span><span style="color: #bc6ec5;">)</span>, undoManager<span style="color: #bc6ec5;">(</span>u<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">for</span> <span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span>&amp; <span style="color: #7590db;">child</span> : state<span style="color: #2d9574;">)</span>
+            <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span>child.hasType<span style="color: #67b11d;">(</span><span style="color: #a45bad;">IDs</span>::MAPPING<span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span>
+                createView<span style="color: #2d9574;">(</span>child<span style="color: #2d9574;">)</span>;
+
+        mappingView.add<span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">new</span> <span style="color: #ce537a; font-weight: bold;">MappingViewEmpty</span><span style="color: #67b11d;">(</span>state, undoManager<span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span>;
+        state.addListener<span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span><span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span>
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">valueTreeChildAdded</span><span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span>&amp;, <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span>&amp; <span style="color: #7590db;">tree</span><span style="color: #bc6ec5;">)</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">override</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span>tree.isAChildOf<span style="color: #67b11d;">(</span>state<span style="color: #67b11d;">)</span> &amp;&amp; tree.hasType<span style="color: #67b11d;">(</span><span style="color: #a45bad;">IDs</span>::MAPPING<span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span> <span style="color: #2d9574;">{</span>
+            createView<span style="color: #67b11d;">(</span>tree<span style="color: #67b11d;">)</span>;
+            resized<span style="color: #67b11d;">()</span>;
+        <span style="color: #2d9574;">}</span>
+    <span style="color: #bc6ec5;">}</span>
+
+    <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">valueTreeChildRemoved</span><span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span>&amp; <span style="color: #7590db;">exParent</span>, <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span>&amp; <span style="color: #7590db;">tree</span>, <span style="color: #ce537a; font-weight: bold;">int</span><span style="color: #bc6ec5;">)</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">override</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span>exParent == state &amp;&amp; tree.hasType<span style="color: #67b11d;">(</span><span style="color: #a45bad;">IDs</span>::MAPPING<span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span> <span style="color: #2d9574;">{</span>
+            removeView<span style="color: #67b11d;">(</span>tree<span style="color: #67b11d;">)</span>;
+            resized<span style="color: #67b11d;">()</span>;
+        <span style="color: #2d9574;">}</span>
+    <span style="color: #bc6ec5;">}</span>
+
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">private</span>:
+    <span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #7590db;">state</span>;
+    <span style="color: #ce537a; font-weight: bold;">UndoManager</span>&amp; <span style="color: #7590db;">undoManager</span>;
+    <span style="color: #ce537a; font-weight: bold;">OwnedArray</span><span style="color: #bc6ec5;">&lt;</span>Component<span style="color: #bc6ec5;">&gt;</span> <span style="color: #7590db;">mappingView</span>;
+<span style="color: #4f97d7;">}</span>;
+</pre>
+</div>
+</section>
+<section id="slide-orge621903">
+<h3 id="orge621903">Undo/redo</h3>
+<p>
+<code>juce::UndoManager</code> object keeps a list of past actions and can use these actions to move backwards and forwards through an undo history.
+</p>
+
+<p>
+We pass in a pointer to a <code>juce::UndoManager</code> object every time we want a change to be undoable <code>nullptr</code> otherwise.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++">new_plugin.setProperty<span style="color: #4f97d7;">(</span><span style="color: #a45bad;">IDs</span>::name, desc.name, &amp;undoManager<span style="color: #4f97d7;">)</span>;
+
+preset.appendChild<span style="color: #4f97d7;">(</span>new_plugin, &amp;undoManager<span style="color: #4f97d7;">)</span>;
+</pre>
+</div>
+
+</section>
+<section id="slide-orgacfca01">
+<h3 id="orgacfca01">Save/load</h3>
+<p>
+You can dump the entire state of the tree into xml or binary format that can easily be saved/loaded from disk. Code borrowed from <a href="https://github.com/drowaudio/presentations/blob/master/ADC%202017%20-%20Using%20JUCE%20ValueTrees%20and%20Modern%20C%2B%2B%20to%20Build%20Large%20Scale%20Applications/Examples/shared/drow_Utilities.h">drowaudio</a>.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span> <span style="color: #bc6ec5; font-weight: bold;">loadValueTree</span> <span style="color: #4f97d7;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">File</span>&amp; <span style="color: #7590db;">file</span>, <span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #7590db;">asXml</span><span style="color: #4f97d7;">)</span> <span style="color: #4f97d7;">{</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>asXml<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> <span style="color: #7590db;">xml</span> = <span style="color: #a45bad;">std</span>::unique_ptr<span style="color: #67b11d;">&lt;</span><span style="color: #a45bad;">juce</span>::XmlElement<span style="color: #67b11d;">&gt;</span> <span style="color: #67b11d;">(</span><span style="color: #a45bad;">juce</span>::<span style="color: #a45bad;">XmlDocument</span>::parse <span style="color: #b1951d;">(</span>file<span style="color: #b1951d;">)</span><span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span>
+            <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> <span style="color: #a45bad;">juce</span>::<span style="color: #a45bad;">ValueTree</span>::fromXml <span style="color: #2d9574;">(</span>*xml<span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">else</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">FileInputStream</span> <span style="color: #7590db;">is</span> <span style="color: #2d9574;">(</span>file<span style="color: #2d9574;">)</span>;
+
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span>is.openedOk<span style="color: #67b11d;">()</span><span style="color: #2d9574;">)</span>
+            <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> <span style="color: #a45bad;">juce</span>::<span style="color: #a45bad;">ValueTree</span>::readFromStream <span style="color: #2d9574;">(</span>is<span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> <span style="color: #bc6ec5;">{}</span>;
+<span style="color: #4f97d7;">}</span>
+
+<span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #bc6ec5; font-weight: bold;">saveValueTree</span> <span style="color: #4f97d7;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">ValueTree</span>&amp; <span style="color: #7590db;">v</span>, <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">File</span>&amp; <span style="color: #7590db;">file</span>, <span style="color: #ce537a; font-weight: bold;">bool</span> <span style="color: #7590db;">asXml</span><span style="color: #4f97d7;">)</span> <span style="color: #4f97d7;">{</span>
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">const</span> <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">TemporaryFile</span> <span style="color: #7590db;">temp</span> <span style="color: #bc6ec5;">(</span>file<span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #a45bad;">juce</span>::<span style="color: #ce537a; font-weight: bold;">FileOutputStream</span> <span style="color: #7590db;">os</span> <span style="color: #bc6ec5;">(</span>temp.getFile<span style="color: #2d9574;">()</span><span style="color: #bc6ec5;">)</span>;
+
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">!</span> os.getStatus<span style="color: #2d9574;">()</span>.wasOk<span style="color: #2d9574;">()</span><span style="color: #bc6ec5;">)</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> <span style="color: #a45bad;">false</span>;
+
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>asXml<span style="color: #bc6ec5;">)</span> <span style="color: #bc6ec5;">{</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #2d9574;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">auto</span> <span style="color: #7590db;">xml</span> = <span style="color: #a45bad;">std</span>::unique_ptr<span style="color: #67b11d;">&lt;</span><span style="color: #a45bad;">juce</span>::XmlElement<span style="color: #67b11d;">&gt;</span> <span style="color: #67b11d;">(</span>v.createXml<span style="color: #b1951d;">()</span><span style="color: #67b11d;">)</span><span style="color: #2d9574;">)</span>
+            xml-&gt;writeToStream <span style="color: #2d9574;">(</span>os, <span style="color: #a45bad;">juce</span>::StringRef<span style="color: #67b11d;">()</span><span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span> <span style="color: #4f97d7; font-weight: bold; font-style: italic;">else</span> <span style="color: #bc6ec5;">{</span>
+        v.writeToStream <span style="color: #2d9574;">(</span>os<span style="color: #2d9574;">)</span>;
+    <span style="color: #bc6ec5;">}</span>
+
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">if</span> <span style="color: #bc6ec5;">(</span>temp.getFile<span style="color: #2d9574;">()</span>.existsAsFile<span style="color: #2d9574;">()</span><span style="color: #bc6ec5;">)</span>
+        <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> temp.overwriteTargetFileWithTemporary<span style="color: #bc6ec5;">()</span>;
+
+    <span style="color: #4f97d7; font-weight: bold; font-style: italic;">return</span> <span style="color: #a45bad;">false</span>;
+<span style="color: #4f97d7;">}</span>
+
+</pre>
+</div>
+
+</section>
+<section id="slide-org1362836">
+<h3 id="org1362836">MVC</h3>
+<ul>
+<li>Model &#x2013; <code>juce::ValueTree</code></li>
+<li>View &#x2013; <code>juce::Component</code></li>
+<li>Controller &#x2013; <code>juce::ValueTree::Listener</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org418de95">
+<h2 id="org418de95">Tips and tricks</h2>
+<div class="outline-text-2" id="text-org418de95">
+</div>
+</section>
+<section id="slide-orgee0bf5d">
+<h3 id="orgee0bf5d"><code>unique_ptr</code> as RAII</h3>
+<p>
+Instead of having a <code>refresh</code> function use C++ build-in RAII!
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++">headerView  = <span style="color: #a45bad;">std</span>::make_unique<span style="color: #4f97d7;">&lt;</span>HeaderView<span style="color: #4f97d7;">&gt;(</span>preset, undoManager<span style="color: #4f97d7;">)</span>;
+mappingList = <span style="color: #a45bad;">std</span>::make_unique<span style="color: #4f97d7;">&lt;</span>MappingList<span style="color: #4f97d7;">&gt;(</span>preset, undoManager, processor.getPluginParameters<span style="color: #bc6ec5;">()</span><span style="color: #4f97d7;">)</span>;
+</pre>
+</div>
+</section>
+<section id="slide-orga9ff39c">
+<h3 id="orga9ff39c">Lambas as callbacks</h3>
+<p>
+Instead of extending a listener class, overriding functions and subscribing, you simply create lambdas in the constructor. They are localized to one place in the code and thus avoid a lot of unnecessary boilerplate.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #a45bad;">Foo</span>::<span style="color: #bc6ec5; font-weight: bold;">Foo</span><span style="color: #4f97d7;">()</span>
+<span style="color: #4f97d7;">{</span>
+    tilt.onClick        = <span style="color: #bc6ec5;">[</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span><span style="color: #bc6ec5;">]</span> <span style="color: #bc6ec5;">{</span> addMapping<span style="color: #2d9574;">(</span><span style="color: #a45bad;">ViewType</span>::Tilt<span style="color: #2d9574;">)</span>; <span style="color: #bc6ec5;">}</span>;
+    listPlugins.onClick = <span style="color: #bc6ec5;">[</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span><span style="color: #bc6ec5;">]</span> <span style="color: #bc6ec5;">{</span> pluginListWindow = <span style="color: #a45bad;">std</span>::make_unique<span style="color: #2d9574;">&lt;</span>PluginListWindow<span style="color: #2d9574;">&gt;(</span>processor.formatManager<span style="color: #2d9574;">)</span>; <span style="color: #bc6ec5;">}</span>;
+  <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">...</span>
+<span style="color: #4f97d7;">}</span>
+</pre>
+</div>
+</section>
+<section id="slide-orgb4a396e">
+<h3 id="orgb4a396e">Visitor</h3>
+<p>
+Great for applying the same function to a number of components. Code borrowed from <a href="https://github.com/drowaudio/presentations/blob/master/ADC%202017%20-%20Using%20JUCE%20ValueTrees%20and%20Modern%20C%2B%2B%20to%20Build%20Large%20Scale%20Applications/Examples/shared/drow_Utilities.h">drowaudio</a>..
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">template</span><span style="color: #4f97d7;">&lt;</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">typename</span> <span style="color: #ce537a; font-weight: bold;">FunctionType</span><span style="color: #4f97d7;">&gt;</span>
+<span style="color: #4f97d7; font-weight: bold; font-style: italic;">inline</span> <span style="color: #ce537a; font-weight: bold;">void</span> <span style="color: #bc6ec5; font-weight: bold;">visitComponents</span> <span style="color: #4f97d7;">(</span><span style="color: #a45bad;">std</span>::<span style="color: #ce537a; font-weight: bold;">initializer_list</span><span style="color: #bc6ec5;">&lt;</span><span style="color: #ce537a; font-weight: bold;">Component</span>*<span style="color: #bc6ec5;">&gt;</span> <span style="color: #7590db;">comps</span>, <span style="color: #ce537a; font-weight: bold;">FunctionType</span>&amp;&amp; <span style="color: #7590db;">fn</span><span style="color: #4f97d7;">)</span> <span style="color: #4f97d7;">{</span>
+  <span style="color: #a45bad;">std</span>::for_each <span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">std</span>::begin <span style="color: #2d9574;">(</span>comps<span style="color: #2d9574;">)</span>, <span style="color: #a45bad;">std</span>::end <span style="color: #2d9574;">(</span>comps<span style="color: #2d9574;">)</span>, fn<span style="color: #bc6ec5;">)</span>;
+<span style="color: #4f97d7;">}</span>
+
+<span style="color: #a45bad;">Foo</span>::<span style="color: #bc6ec5; font-weight: bold;">Foo</span><span style="color: #4f97d7;">()</span> <span style="color: #4f97d7;">{</span>
+  <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">...</span>
+
+  <span style="color: #a45bad;">drow</span>::visitComponents<span style="color: #bc6ec5;">(</span>*<span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span>, <span style="color: #2d9574;">{</span>&amp;tilt, &amp;pan, &amp;roll, &amp;vibrato, &amp;shake, &amp;tap<span style="color: #2d9574;">}</span>
+                        <span style="color: #2d9574;">[</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span><span style="color: #2d9574;">](</span><span style="color: #ce537a; font-weight: bold;">Component</span>* <span style="color: #7590db;">c</span><span style="color: #2d9574;">)</span> <span style="color: #2d9574;">{</span> addAndMakeVisible<span style="color: #67b11d;">(</span>c<span style="color: #67b11d;">)</span>; <span style="color: #2d9574;">}</span><span style="color: #bc6ec5;">)</span>;
+
+  <span style="color: #a45bad;">drow</span>::visitComponents<span style="color: #bc6ec5;">(</span><span style="color: #2d9574;">{</span>&amp;tilt, &amp;pan, &amp;roll, &amp;vibrato, &amp;shake, &amp;tap<span style="color: #2d9574;">}</span>,
+                        <span style="color: #2d9574;">[</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span><span style="color: #2d9574;">](</span><span style="color: #ce537a; font-weight: bold;">Component</span>* <span style="color: #7590db;">c</span><span style="color: #2d9574;">)</span> <span style="color: #2d9574;">{</span> c-&gt;addMouseListener<span style="color: #67b11d;">(</span><span style="color: #4f97d7; font-weight: bold; font-style: italic;">this</span>, <span style="color: #a45bad;">false</span><span style="color: #67b11d;">)</span>; <span style="color: #2d9574;">}</span><span style="color: #bc6ec5;">)</span>;
+
+  <span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">...</span>
+<span style="color: #4f97d7;">}</span>
+
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf40a519">
+<h2 id="orgf40a519">Questions?</h2>
+</section>
+</section>
+</div>
+</div>
+<script src="./lib/js/head.min.js"></script>
+<script src="./js/reveal.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+pdfSeparateFragments: true,
+
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'none', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: './plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

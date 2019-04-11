@@ -2,6 +2,7 @@
 #+REVEAL_THEME: black
 #+REVEAL_TRANS: none
 #+REVEAL_EXTRA_CSS: ./presentations.css
+#+REVEAL_ROOT: .
 
 # Local variables:
 # after-save-hook: org-re-reveal-export-to-html-and-browse
@@ -54,7 +55,6 @@
    - [[https://github.com/Microsoft/GSL][gsl (Guidelines Support Library)]] -- ~gsl::byte~ and ~gsl::span~ /view/ into raw memory.
 
 * Core concepts
-    
 * Interrupts/Events
   - *Interrupts* are the lowest level of abstraction. Arise directly from hardware, halting execution.
   - *Events* are the /meaningful/ encoding of *interrupts*, e.g., read sensor, react to pin change.

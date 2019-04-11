@@ -7,9 +7,9 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="/home/horigome/dev/reveal.js/css/reveal.css"/>
+<link rel="stylesheet" href="./css/reveal.css"/>
 
-<link rel="stylesheet" href="/home/horigome/dev/reveal.js/css/theme/black.css" id="theme"/>
+<link rel="stylesheet" href="./css/theme/black.css" id="theme"/>
 
 <link rel="stylesheet" href="./presentations.css"/>
 
@@ -19,7 +19,7 @@
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = '/home/horigome/dev/reveal.js/css/print/pdf.css';
+        link.href = './css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -32,13 +32,13 @@
 </section>
 
 <section>
-<section id="slide-orgcbebf4e">
-<h2 id="orgcbebf4e"></h2>
+<section id="slide-org0ed2180">
+<h2 id="org0ed2180"></h2>
 <iframe width="600px" height="200px" src="https://www.youtube.com/embed/O2R4R_EebBk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 </section>
-<section id="slide-org4062df0">
-<h3 id="org4062df0">Who are we?</h3>
+<section id="slide-org0d0f51f">
+<h3 id="org0d0f51f">Who are we?</h3>
 <p>
 Engineers at Genki Instruments, creators of <b>Wave</b>, an expressive embedded device for music and beyond.
 </p>
@@ -54,8 +54,8 @@ We mainly use <b>C++</b>, but curious about other systems-level languages. We st
 </section>
 </section>
 <section>
-<section id="slide-org20b1aa0">
-<h2 id="org20b1aa0">Goal</h2>
+<section id="slide-org4fda827">
+<h2 id="org4fda827">Goal</h2>
 <p>
 Build boilerplate for a minimal (event driven) <b>concurrent</b> OS.
 </p>
@@ -71,8 +71,8 @@ Inspired by our own attempts at building reliable firmware for Wave.
 </section>
 </section>
 <section>
-<section id="slide-orgfe03186">
-<h2 id="orgfe03186">Constraints</h2>
+<section id="slide-orgfa1fa1f">
+<h2 id="orgfa1fa1f">Constraints</h2>
 <ul>
 <li>Processing power and memory limited.</li>
 <li><i>Soft</i> real time (cooperative scheduler) &#x2013; tasks operate on deadlines that don't cause fatalities if not met.</li>
@@ -86,16 +86,16 @@ Inspired by our own attempts at building reliable firmware for Wave.
 </section>
 </section>
 <section>
-<section id="slide-org7e322ad">
-<h2 id="org7e322ad">Why C++17/20?</h2>
-<div class="outline-text-2" id="text-org7e322ad">
+<section id="slide-org34a8ec5">
+<h2 id="org34a8ec5">Why C++17/20?</h2>
+<div class="outline-text-2" id="text-org34a8ec5">
 </div>
 </section>
-<section id="slide-org0b7e2b2">
-<h3 id="org0b7e2b2">Type safety</h3>
+<section id="slide-org92cb4a1">
+<h3 id="org92cb4a1">Type safety</h3>
 </section>
-<section id="slide-org06bcd19">
-<h3 id="org06bcd19">Language features</h3>
+<section id="slide-orga9c4cc3">
+<h3 id="orga9c4cc3">Language features</h3>
 <ul>
 <li><code>RAII</code> &#x2013; Deterministic way to manage resources.</li>
 <li><code>Templates</code> &#x2013; Generic compile-time programming.</li>
@@ -112,8 +112,8 @@ Inspired by our own attempts at building reliable firmware for Wave.
 </ul>
 
 </section>
-<section id="slide-org8ceba5e">
-<h3 id="org8ceba5e">Active developer community</h3>
+<section id="slide-org95119fc">
+<h3 id="org95119fc">Active developer community</h3>
 <ul>
 <li><a href="https://github.com/boost-experimental/sml">boost::sml (State Machine Library)</a> &#x2013; Domain Specific Language for writing FSMs.</li>
 <li><a href="https://en.cppreference.com/w/">stl (Standard Template Library)</a> &#x2013; Useful algorithms, types and containers.</li>
@@ -125,14 +125,13 @@ Inspired by our own attempts at building reliable firmware for Wave.
 </section>
 </section>
 <section>
-<section id="slide-orgd429e00">
-<h2 id="orgd429e00">Core concepts</h2>
-
+<section id="slide-orgf05e13a">
+<h2 id="orgf05e13a">Core concepts</h2>
 </section>
 </section>
 <section>
-<section id="slide-org4792ccc">
-<h2 id="org4792ccc">Interrupts/Events</h2>
+<section id="slide-org2777f7e">
+<h2 id="org2777f7e">Interrupts/Events</h2>
 <ul>
 <li><b>Interrupts</b> are the lowest level of abstraction. Arise directly from hardware, halting execution.</li>
 <li><b>Events</b> are the <i>meaningful</i> encoding of <b>interrupts</b>, e.g., read sensor, react to pin change.</li>
@@ -162,8 +161,8 @@ Inspired by our own attempts at building reliable firmware for Wave.
 </section>
 </section>
 <section>
-<section id="slide-org536a46a">
-<h2 id="org536a46a">Message passing (dispatching)</h2>
+<section id="slide-org6650c88">
+<h2 id="org6650c88">Message passing (dispatching)</h2>
 <ul>
 <li><p>
 <b>Message passing</b> is a form of communication accomplished by queuing <b>events</b>.
@@ -175,8 +174,8 @@ Inspired by our own attempts at building reliable firmware for Wave.
 
 </ul>
 </section>
-<section id="slide-orgea8ca49">
-<h3 id="orgea8ca49"></h3>
+<section id="slide-org7a67e92">
+<h3 id="org7a67e92"></h3>
 <iframe width="800px" height="200px" src="https://godbolt.org/e#g:!((g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,source:'%23include+%3Cvariant%3E%0A%0Avoid+handle_int()%3B%0Avoid+handle_float()%3B%0A%0Aint+main(int+argc,+char**+argv)%0A%7B%0A++++std::variant%3Cint,+float%3E+v%3B%0A%0A++++if+(argc+%3D%3D++2)+%7B%0A++++++++v+%3D+42%3B%0A++++%7D+else++%7B%0A++++++++v+%3D+42.0f%3B%0A++++%7D%0A%0A++++if+(auto*+p+%3D+std::get_if%3Cint%3E(%26v))+%7B%0A++++++++handle_int()%3B%0A++++%7D+else+if+(auto*+p+%3D+std::get_if%3Cfloat%3E(%26v))+%7B%0A++++++++handle_float()%3B%0A++++//+%7D+else+if+(auto*+p+%3D+std::get_if%3Cbool%3E(%26v))+%7B%0A++++//+++++handle_float()%3B%0A++++%7D%0A%0A++++return+0%3B%0A%7D%0A'),l:'5',n:'0',o:'C%2B%2B+source+%231',t:'0')),k:50,l:'4',n:'0',o:'',s:0,t:'0'),(g:!((h:compiler,i:(compiler:armg820,filters:(b:'0',binary:'1',commentOnly:'0',demangle:'1',directives:'0',execute:'1',intel:'0',libraryCode:'1',trim:'1'),lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B17+-O3+-fno-exceptions',source:1),l:'5',n:'0',o:'ARM+gcc+8.2+(Editor+%231,+Compiler+%231)+C%2B%2B',t:'0')),k:50,l:'4',n:'0',o:'',s:0,t:'0')),l:'2',n:'0',o:'',t:'0')),version:4"></iframe>
 
 <div class="org-src-container">
@@ -216,13 +215,13 @@ int main(int argc, char** argv)
 </div>
 
 </section>
-<section id="slide-org9ab7c2b">
-<h3 id="org9ab7c2b"></h3>
+<section id="slide-org4140f2a">
+<h3 id="org4140f2a"></h3>
 <iframe width="800px" height="200px" src="https://godbolt.org/e#g:!((g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,source:'%23include+%3Cvariant%3E%0A%0A//+creates+helper+type+for+the+variant+visitor%0Atemplate%3Cclass...+Ts%3E+struct+visitor+:+Ts...+%7B+using+Ts::operator()...%3B+%7D%3B%0Atemplate%3Cclass...+Ts%3E+visitor(Ts...)+-%3E+visitor%3CTs...%3E%3B%0A%0A//+struct+visitor+%7B%0A//+++++void+operator()(const+int%26+v)+%7B%7D%3B%0A//+++++void+operator()(const+float%26+v)+%7B%7D%3B%0A//+%7D%3B%0A%0Avoid+handle_int()%3B%0Avoid+handle_float()%3B%0A%0Aint+main(int+argc,+char**+argv)%0A%7B%0A++++std::variant%3Cint,+float%3E+v%3B%0A%0A++++if+(argc+%3D%3D++2)+%7B%0A++++++++v+%3D+42%3B%0A++++%7D+else++%7B%0A++++++++v+%3D+42.0f%3B%0A++++%7D%0A%0A++++std::visit(visitor%7B%0A++++++++%5B%26%5D(const+int%26)+%7B+handle_int()%3B+%7D,%0A++++++++%5B%26%5D(const+float%26)+%7B+handle_float()%3B+%7D,%0A++++++++%7D,+v)%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5',n:'0',o:'C%2B%2B+source+%231',t:'0')),k:50,l:'4',n:'0',o:'',s:0,t:'0'),(g:!((h:compiler,i:(compiler:armg820,filters:(b:'0',binary:'1',commentOnly:'0',demangle:'0',directives:'0',execute:'1',intel:'0',libraryCode:'1',trim:'1'),lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B17+-O3+-fno-exceptions',source:1),l:'5',n:'0',o:'ARM+gcc+8.2+(Editor+%231,+Compiler+%231)+C%2B%2B',t:'0')),k:50,l:'4',n:'0',o:'',s:0,t:'0')),l:'2',n:'0',o:'',t:'0')),version:4"></iframe>
 
 </section>
-<section id="slide-org58ccbf1">
-<h3 id="org58ccbf1">Considerations</h3>
+<section id="slide-orgd5d3543">
+<h3 id="orgd5d3543">Considerations</h3>
 <dl>
 <dt><code>std::get_if</code></dt><dd>Smaller binary, performant.</dd>
 <dt><code>std::visit</code></dt><dd>Larger binary, extra <code>cmp</code>, nice syntax, exhaustive.</dd>
@@ -232,16 +231,16 @@ int main(int argc, char** argv)
 </section>
 </section>
 <section>
-<section id="slide-orgae74246">
-<h2 id="orgae74246">Tasks / Scheduler</h2>
+<section id="slide-orga8646ef">
+<h2 id="orga8646ef">Tasks / Scheduler</h2>
 <ul>
 <li>A <b>task</b> is an abstraction that represents some processing unit.</li>
 <li>A <b>scheduler</b> runs <b>tasks</b> from the <b>main context</b> (!)</li>
 
 </ul>
 </section>
-<section id="slide-org0b65e42">
-<h3 id="org0b65e42"></h3>
+<section id="slide-orgade3969">
+<h3 id="orgade3969"></h3>
 <iframe width="800px" height="200px" src="https://godbolt.org/embed-ro#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAKxAEZSAbAQwDtRkBSAJgCFufSAZ1QBXYskwgA5NwDMeFsgYisAag6yAwgREAHBpg3YOABgCCpswUwBbfU2sbtAT12YWTG5gB0v1WeJgQVJVAld3T0xVADERRRDBAnQQEEE8AC9MAH0CX29VAEl0AA8jSwA3VDx0VQAzEizMJmQELLw7Bgg0FkTVROSQHX1DLQCgvLKuADZQkNjFbinFuoSklIUsYqzBTABHEXcJJyLiidlsAEp1AHY%2Bc1UH1QhaiH6U4EwCY5KjCAILi4hPIXDR3CzXAAilks1g6DhGLjcHi8qgAKnoDCEwkjIjEyuZuolMMVdMRVJVqnUGk0WhB0cNFsshpi8dNlrUQbdLI9VITrCSyW9UhlsgRVAA5dSyCF9NaDDHZNKZJxC4i2VDlbJq2qYNWKUVOekGMrnFLlJjKEZgnn1YiNZqtdr6V5y20AdyYxHQhoVv2ZmEBsoG7s93q00V%2BHNI3J5sYeQpsTAA1tkNsTtnsDvqnOKylzISDZGCOJDoeYKTUEKx0AY2iwCBBC2CK6oqywa9lagxUA5G6DLAAjVCoBihJiCJNZLhZYhxFgKYB9otlswKMWJhSNm7Wx6VZgEPAGVRDkd9FqYdAiAx22csedsKUygizq0xh57hyHqIn0cEceT2gZznBdH1CF9%2B3MN9VAAemgtFkyiBRVFEaxiAAWkENA3FUcdVG1XVDkMe5Hj5HCRCIMcJyyWhQI4ABWPg2TomUSx3ONSKYcjUFUFhMAvQQsjdEgk1ohjGWY7c8M%2BMQWEogCgLvBdQRuKFl2I9jUB6MVOIo0lUAkQQBKE4gRI0FixOY1jW2rWsux7BsmxUiCLHU2M1R0YhZITBCsl0Jg8GICBeP4wThJCPSDKM4SmygktVOLVyOK4uSp1EvgJNYqCeSSijgvQKKTLS%2BiWNuKSPNkv8qOnW970XRy4ucuMHhy7iIswQzQsKsz1AsqFSrbDs6wc5SGrUlyzCasqZKDFJExTXz/MCvKCqTcLiH09qVpi1zRoSiaSM03odO4yrJwYPBem67z5v9P5/2orF7q4bbxp5N0EC/J5MIQC8r11BTaquTLXJtakHTuqjzsSEJ6PSiEukO7SuKZf8ga5EGmpa2Hls61bVDajrjKTYrQNOpc9smt6PqPIK%2BPy3HGzRtjKZ5AmVvJrKmoajGHjil6eW517Hnc6aTGcwWpEBBhpDoqRSBYaQTDl1BpE0fh%2BD6URxCiORaDlghFclwEkxAOiTEYaQABY5YVqQldIFWpDlwQQHNg27cl0g4FgJA0DsL8yAoBH/evEBPRsYAAA4uHN2pD1Ql2IAHQ3SAHBRPWcaQ9dIP2vHrAB5FgGEzj3SCwRM2AMFP8DVZAD01F3S%2BJTBkHIyQpGztdMGl0vzoHYgM80DB2%2Bz592izz3mDYFB1d4Rg8AHF3IEBVBdAPQ7pAwpIzM4Xh%2BFoa5VDQ/PZCP2oWFQNDiQkNe8EO52tYkOgpZlm2U8dswACUAFlVGAZBkCqEjt4LgTxcCEBIOoLgsh6CqCHiHXUUCYFXDVnvXg%2BtDYAlICbM2FspDW3lu/aQztXakHdkrLBPcuBv1Lo7DBHssGamIGkTSIBLZAA"></iframe>
 
 <div class="org-src-container">
@@ -302,16 +301,16 @@ int main(int argc, char** argv) {
 </section>
 </section>
 <section>
-<section id="slide-orgf6bc78c">
-<h2 id="orgf6bc78c">Finite state machine</h2>
+<section id="slide-org46c5ec6">
+<h2 id="org46c5ec6">Finite state machine</h2>
 <ul>
 <li><b>Finite state machines</b> describe and handle <b>business logic</b> or hardware functionality, e.g., button or battery monitoring.</li>
 
 </ul>
 
 </section>
-<section id="slide-org5a31ff5" data-background="#D3D3D3">
-<h3 id="org5a31ff5">Two-button shutdown</h3>
+<section id="slide-orgeb811cf" data-background="#D3D3D3">
+<h3 id="orgeb811cf">Two-button shutdown</h3>
 
 <div class="figure">
 <p><object type="image/svg+xml" data="img/button_shutdown.svg" class="org-svg">
@@ -320,8 +319,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 
 </section>
-<section id="slide-org3bb5846">
-<h3 id="org3bb5846"></h3>
+<section id="slide-org2404b08">
+<h3 id="org2404b08"></h3>
 <iframe width="800px" height="200px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAKxAEZSAbAQwDtRkBSAJgCFufSAZ1QBXYskwgA5NwDMeFsgYisAag6yAwggIEADoJAB6I8SYB3AHTBCCEQCMRgzONQsCmd5bQBbI/dRUQQIAWkwADz0XPB9PAiYGI0EfRJ8mYJcjBSUVTH9A4KSUywQ9PQ1sDgAGAEE5bOU1DU1kYPx3Cuq62oA3VDx0VRE8AH0FfGQmDxHBOwJ0VHMWCABKDT5e/sHBAE8Mnxm5haXV9a6uliZYwT0mCVVMHrjBdQB2DZrVVWDiEWQCVSOXRuN48IYKAgADhGAIG60BgQYqiIwGADEwM3iHnhHFeABEzrVcQSibUfn8AQRzKgRkCiCxDiJ5osWKCul8vsEpnhkKo0CwMpFiOD3NCATwmfSABrqWR41RVQmfDlcgg8vluQV6YXDUUw1QS4EsACasvltCV7I5TCZqFUqCiZiIxFWqw1AoBuI%2BHJ9Q0ECmAqku11u9wCQQIIBAyQYSt9HKcAaDV0wNzumAeT3cgkttXjX35wVUNqIqjwghG4RG2tTzkGGnlHAArHwm3iIIWASXUNwAGwPFag1TETAEMSszCWAZmhsGyVuGV9vsPSwotEY1WYHH4uP5zvF21lis7asjwR1s3qFvN9v77vLzCDr3D0fjlfThuzw3001Lrj9yc13RTEpi3WQwWJXNlXjO9D3LSsRhHdF0kwes5SvVtb01LtbQfJ93hfMdiAnKc0IJdDvzcX9/2XMAwEA1BUWAzdt3I7092wg9S3gk8kMwFCyIwm8O04%2B9/wHIcRyIkiPzlL95xNdQaPEuiGKYjcsTAiCd3A848w4j0uLtWYmWOVlZ2bTCh12fZGWZE41nAt42L06DfVg7iWAmUC7LMy9LJvIdhjGLyeR8kz7OWRztJc0k3J9KS3zSABrDECDMAVCDwNwYSYex0QgK183jAAqbguBYNwMRrc9UPKmYlLBR44maOk3E6Ft4KrGq60CiyuC4bqz16gaZlIIrit9crKpYarhrq0aXn4TMWq0NqWA6ngeNPWs6rbfyBpPHqFq4MbXMm/NyqG3b0HqpbeBWjo1oUzausQzBkN6/b%2Boqqqdtq27FvG/SLp9cqjvmwHTvupqswIVqXtkSpOuPd7Pr2xt0Omv7jqhs64tBqaBuugG7sax74eeo1XtR3HAqMMtQsmaYIr8n6AgIBB/pG6Hgfi0Hwe5k6GuW5qns0daaYQun9oZ8YwpZo4WQOrgOa5umgfOwmOXKtWhbxmGKYR6mkcst6%2BIEvqsYGjxiB8BRuTYEYIZuu6%2Be1nWBr1jXofJsXKYlxHka21GLa%2BzHGxtlx7cuNUnZJnn8e6fmLvK22Y8d4BpchsnRbh436Slqsw4x1QGdZ5XZyld2PaUrh04duOs5d0nFr9/OqcL02UedtH%2BPDsvviVpZLylCafWiibIKJHSPi6CFVDSBQIAXphiGAZBSD5BA15Kkri3Xno1neCbw2CKMYwvnxmipGl1t8lkKm%2Ba/dJB74sR5EZ0mcYgCAgf0ABemBUAADN/4%2BCfHJdCtBaCTwJiqHwlhtSoAkOeEY/sID%2B0MCASW7wqhb3SiILc%2BI4FuWSEg4gKDazoLhpguG2DcE8HoMiX4xC8SkJ9OQ5BqCKwYKwVGRh%2BDVAgISM4YkHCEEUKoWgvh9CBEvXeMwkRDAxEkMtDuWoUgViMGkE2KQpAWDSCqPo1A0hND8GWsIMQ9w5C0H0ZGKQxiVjaOSiAJsXBLBVFeO4/8ABOV4rxfFNi8VwHRUgAAs%2BjDGOJMdIfRhh8EOKcaQOAsAkC%2BD0HgdEZAKAiR8Jk7JIA14%2BGAJCLg%2BCQFZNtoYCA9gjH6PsA7YgOxpB2NIL4WI7gADyLAGAtJiaQLAaQ2DonqYMvAI5/h4CeIYAZERMDICZJIKQbSIQfTGQwPA9gzDNM0BgZZbT0oxFaVoxgrB2AWN4IwLZhhIDaIdGqTU0gQhtAbJwXg/BaCvFUCELpsgfkgMqmEcIEg9CPIFPE0Q4hJCwLCXogxYzTFSBqAAJQALKqA3rySElguCqAgLgQgJAlKyGYXs/JWSXAktgaocxHzeD2Pqc40grjwmvEsL4rgbLXiyCqANKo4TOW%2BLCZEhFAykXxJAIkpl2iGDSC4FExFcTSBJK0dop4xB/RuBAOEoAA%3D%3D"></iframe>
 
 <div class="org-src-container">
@@ -393,8 +392,8 @@ Sorry, your browser does not support SVG.</object>
 </pre>
 </div>
 </section>
-<section id="slide-org64997c7">
-<h3 id="org64997c7">Logging for free</h3>
+<section id="slide-org85cdbd9">
+<h3 id="org85cdbd9">Logging for free</h3>
 <div class="org-src-container">
 
 <pre  class="src src-C++"><span style="color: #4f97d7; font-weight: bold; font-style: italic;">namespace</span> <span style="color: #a45bad;">sml</span> = <span style="color: #a45bad;">boost</span>::sml;
@@ -430,8 +429,8 @@ Sorry, your browser does not support SVG.</object>
 </section>
 </section>
 <section>
-<section id="slide-orgb48101c">
-<h2 id="orgb48101c">Questions?</h2>
+<section id="slide-orgec53a2a">
+<h2 id="orgec53a2a">Questions?</h2>
 
 <div class="figure">
 <p><img src="img/wave_keyboard.jpg" alt="wave_keyboard.jpg" width="60%" height="60%" />
@@ -440,8 +439,8 @@ Sorry, your browser does not support SVG.</object>
 </section>
 </section>
 <section>
-<section id="slide-org2009a95">
-<h2 id="org2009a95">Resources</h2>
+<section id="slide-org2d4c9e7">
+<h2 id="org2d4c9e7">Resources</h2>
 <ul>
 <li><a href="https://en.cppreference.com/w/">C++ reference</a></li>
 <li><a href="https://bitbashing.io/embedded-cpp.html">C++ on Embedded Systems</a></li>
@@ -453,8 +452,8 @@ Sorry, your browser does not support SVG.</object>
 </section>
 </div>
 </div>
-<script src="/home/horigome/dev/reveal.js/lib/js/head.min.js"></script>
-<script src="/home/horigome/dev/reveal.js/js/reveal.js"></script>
+<script src="./lib/js/head.min.js"></script>
+<script src="./js/reveal.js"></script>
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
@@ -484,11 +483,11 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: '/home/horigome/dev/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
- { src: '/home/horigome/dev/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: '/home/horigome/dev/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: '/home/horigome/dev/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
- { src: '/home/horigome/dev/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: './plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
