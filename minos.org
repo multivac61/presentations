@@ -25,7 +25,7 @@
 * Goal
   Build boilerplate for a minimal (event driven) *concurrent* OS.
 
-  It should on bare-metal and have a *single thread of execution*.
+  It should run on bare-metal and have a *single thread of execution*.
   
   Inspired by our own attempts at building reliable firmware for Wave.
   
