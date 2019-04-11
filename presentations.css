@@ -1,0 +1,53 @@
+.reveal h1.title {
+    color: #51afef;
+    text-transform: none;
+}
+
+.reveal h2.author {
+    text-transform: none;
+}
+
+.reveal h2 {
+    color: #c678dd;
+    text-transform: none;
+}
+
+.reveal h3 {
+    text-transform: none;
+}
+
+.reveal h4 {
+    text-transform: none;
+}
+
+.reveal h5 {
+    text-transform: none;
+}
+
+.reveal code {
+    color: #98be65;
+}
+
+.reveal {
+    font-size: 1.5em;
+    text-transform: none;
+}
+.reveal pre {
+    font-size: 0.7em;
+    box-shadow: none;
+}
+
+.reveal section img {
+    border: none;
+    box-shadow: none;
+}
+
+.reveal .slides section iframe {
+    -webkit-transform: scale(0.60) translate(-40%, -35%);
+    -moz-transform: scale(0.60) translate(-40%, -35%);
+    transform: scale(0.60) translate(-40%, -35%);
+    min-width: 200%;
+    min-height: 1000%;
+    height: 1000px;
+}
+
