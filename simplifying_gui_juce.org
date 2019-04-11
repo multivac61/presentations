@@ -306,7 +306,7 @@ inline void visitComponents (std::initializer_list<Component*> comps, FunctionTy
 Foo::Foo() {
   // ...
 
-  drow::visitComponents(*this, {&tilt, &pan, &roll, &vibrato, &shake, &tap}
+  drow::visitComponents({&tilt, &pan, &roll, &vibrato, &shake, &tap}
                         [this](Component* c) { addAndMakeVisible(c); });
 
   drow::visitComponents({&tilt, &pan, &roll, &vibrato, &shake, &tap},
